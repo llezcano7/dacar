@@ -1,0 +1,62 @@
+:root {
+    /* Marca */
+    --color-primary: #fc4b08;
+    --color-primary-hover: #e04106;
+    --color-primary-active: #c43905;
+    --color-primary-light: #ff7a45;
+    --color-primary-soft: #fff1ec;
+    --color-secondary: #262626;
+    --color-secondary-hover: #3a3a3a;
+    --color-secondary-light: #595959;
+
+    /* Neutros */
+    --color-white: #ffffff;
+    --color-bg: #fafafa;
+    --color-border: #e5e5e5;
+    --color-muted: #8c8c8c;
+
+    /* Texto */
+    --color-text: #1e1e1e;
+    --color-text-light: #595959;
+    --color-text-on-primary: #f9f9f9;
+
+    /* Estados */
+    --color-success: #2e9e5b;
+    --color-warning: #f5a623;
+    --color-error: #d92d20;
+    --color-info: #2f80ed;
+
+    /* Sombras */
+    --shadow-sm: 0 1px 3px rgba(38, 38, 38, 0.1);
+    --shadow-md: 0 4px 12px rgba(38, 38, 38, 0.12);
+    --shadow-lg: 0 10px 30px rgba(38, 38, 38, 0.16);
+
+    /* Espaciado */
+
+    --space-xs: 0.5rem;
+    --space-s: 1rem;
+    --space-ss: 1.5rem;
+    --space-m: 2rem;
+    --space-mm: 3rem;
+    --space-l: 4rem;
+    --space-xl: 6rem;
+    --space-xxl: 8rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    color: rgb(232, 232, 232);
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    background-color: var(--color-bg);
+}

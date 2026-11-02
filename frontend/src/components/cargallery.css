@@ -1,0 +1,236 @@
+/* 3 cards arriba + 2 centradas abajo en desktop */
+.car-gallery-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-ss);
+}
+
+/* Tamaño de cada card dentro de la grilla (va en la envoltura de Card) */
+.car-gallery-item {
+    flex: 1 1 320px;
+    max-width: 380px;
+}
+
+/* Card sin padding propio: la imagen y el body manejan el suyo */
+.car-card {
+    --card-padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Escenario de la imagen */
+.car-card-image {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    background:
+        radial-gradient(ellipse at 50% 75%, var(--color-primary-soft) 0%, transparent 65%),
+        var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.car-card-image img {
+    position: relative;
+    z-index: 1;
+    width: 250px;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.car-card:hover .car-card-image img {
+    transform: translateX(10px) scale(1.06);
+}
+
+.car-card-category {
+    position: absolute;
+    z-index: 2;
+    top: var(--space-s);
+    right: var(--space-s);
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    color: var(--color-secondary-light);
+    font-size: clamp(0.7rem, 0.66rem + 0.17vw, 0.8rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.car-card-badge {
+    position: absolute;
+    z-index: 2;
+    top: var(--space-s);
+    left: var(--space-s);
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    font-size: clamp(0.7rem, 0.66rem + 0.17vw, 0.8rem);
+    font-weight: 800;
+    box-shadow: 0 6px 16px rgba(252, 75, 8, 0.4);
+    animation: car-gallery-pulso 2.4s ease-in-out infinite;
+}
+
+/* Body */
+.car-card-body {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.car-card-name {
+    margin-bottom: 4px;
+    color: var(--color-text-light);
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+    font-weight: 700;
+}
+
+.car-card-price {
+    margin-bottom: var(--space-xs);
+    color: var(--color-primary);
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+    font-weight: 700;
+}
+
+.car-card-price small {
+    color: var(--color-primary);
+    font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+    font-weight: 500;
+}
+
+.car-card-discount {
+    align-self: flex-start;
+    margin-bottom: var(--space-s);
+    padding: 0.35rem 0.75rem;
+    border-radius: 10px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary-active);
+    font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+    font-weight: 500;
+}
+
+.car-card-discount strong {
+    color: var(--color-primary-active);
+    font-weight: 800;
+}
+
+.car-card-features {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+    font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+}
+
+.car-card-features li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-light);
+}
+
+.car-card-btn {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    font-family: inherit;
+    font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.3s ease;
+}
+
+.car-card-btn-flecha {
+    color: var(--color-white);
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.car-card-btn:hover {
+    background-color: var(--color-primary-hover);
+    box-shadow: 0 8px 20px rgba(252, 75, 8, 0.35);
+}
+
+.car-card-btn:hover .car-card-btn-flecha {
+    transform: translateX(5px);
+}
+
+.car-card-btn:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+@keyframes car-gallery-pulso {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.07);
+    }
+}
+
+/**************RESPONSIVE DESIGN************/
+
+
+@media (prefers-reduced-motion: reduce) {
+    .car-card-badge {
+        animation: none;
+    }
+}
+
+/**************RESPONSIVE DESIGN************/
+
+@media (max-width: 726px) {
+    .car-gallery-section.container {
+        padding-inline: var(--space-mm);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .car-gallery-item {
+        max-width: 100%;
+    }
+
+    .car-gallery {
+        padding: 40px 16px;
+    }
+
+    .car-card {
+        max-width: 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .car-card-badge {
+            animation: none;
+        }
+    }
+}
+
+@media (max-width: 510px) {
+    .car-gallery-section.container {
+        padding-inline: var(--space-s);
+    }
+
+    .car-card-image img {
+        width: 200px;
+        height: auto;
+    }
+}

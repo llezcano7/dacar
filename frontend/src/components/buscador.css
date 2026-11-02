@@ -1,0 +1,249 @@
+.bflota {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-secondary);
+  color: var(--color-white);
+}
+
+.bflota-wrap {
+  width: 100%;
+  max-width: 1200px;
+  padding: 36px 24px;
+}
+
+/* primary-light y no primary: sobre fondo oscuro lee mejor en texto chico */
+.bflota-eyebrow {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary-light);
+}
+
+/* ---------- Vista resumen ---------- */
+
+.bflota-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-ss);
+}
+
+.bflota-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.bflota-datas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+.bflota-data {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: var(--color-secondary-hover);
+}
+
+.bflota-data span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-border);
+}
+
+.bflota-data strong {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 700;
+}
+
+.bflota-empty {
+  max-width: 520px;
+  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+  line-height: 1.5;
+  color: var(--color-border);
+}
+
+/* ---------- Formulario de edición ---------- */
+
+.bflota-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-ss);
+}
+
+.bflota-form-top {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: var(--space-s);
+}
+
+.bflota-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bflota-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+}
+
+.bflota-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-ss);
+}
+
+.bflota-group {
+  display: flex;
+  flex: 1 1 420px;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 18px;
+  border-radius: 18px;
+  background: var(--color-secondary-hover);
+}
+
+.bflota-group-title {
+  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.bflota-group-title small {
+  margin-left: var(--space-xs);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--color-border);
+}
+
+.bflota-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+.bflota-field{
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs)
+}
+
+.bflota-group {
+  display: flex;
+  flex: 1 1 140px;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--color-border);
+}
+
+.bflota-group select,
+.bflota-group input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-secondary-light);
+  border-radius: 10px;
+  background: var(--color-secondary);
+  color: var(--color-white);
+  font: inherit;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  color-scheme: dark;
+  /* íconos del calendario visibles sobre fondo oscuro */
+}
+
+.bflota-group select:focus-visible,
+.bflota-group input:focus-visible,
+.bflota-btn:focus-visible,
+.bflota-btn-contorno:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* --color-error (#d92d20) no alcanza contraste sobre fondo oscuro, por eso este tono más claro */
+.bflota-error {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--color-error);
+}
+
+.bflota-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+/* ---------- Botones ---------- */
+
+.bflota-btn,
+.bflota-btn-contorno {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-s);
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+/* primary-active: texto blanco con contraste AA (ver nota en flota.css) */
+.bflota-btn {
+  background: var(--color-primary-active);
+  color: var(--color-text-on-primary);
+}
+
+.bflota-btn-contorno {
+  border: 1.5px solid var(--color-secondary-light);
+  background: transparent;
+  color: var(--color-white);
+}
+
+.bflota-btn:hover,
+.bflota-btn-contorno:hover {
+  filter: brightness(0.92);
+}
+
+@media(max-width: 726px) {
+  .bflota-wrap.container {
+    padding-inline: var(--space-mm)
+  }
+}
+
+@media(max-width: 510px) {
+  .bflota-wrap.container {
+    padding-inline: var(--space-s)
+  }
+}
+
+@media (max-width: 600px) {
+  .bflota-wrap {
+    padding: 28px 16px;
+  }
+
+  .bflota-group {
+    flex-basis: 100%;
+  }
+
+  .bflota-actions>* {
+    flex: 1 1 100%;
+  }
+}

@@ -1,0 +1,36 @@
+export const PARTNERS = [
+  {
+    id: "partner-1",
+    nombre: "Comercio 1",
+    rubro: "Gastronomía",
+    descuento: "15% OFF",
+    detalle: "En toda la carta presentando tu reserva Da'car.",
+    imagen: "/partners/comercio-1.jpg",
+    vigencia: "Válido todo el año",
+  },
+  {
+    id: "partner-2",
+    nombre: "Comercio 2",
+    rubro: "Chocolates",
+    descuento: "10% OFF",
+    detalle: "En compras en el local.",
+    imagen: "/partners/comercio-2.jpg",
+  },
+  {
+    id: "partner-3",
+    nombre: "Comercio 3",
+    rubro: "Excursiones",
+    descuento: "20% OFF",
+    detalle: "En excursiones y actividades seleccionadas.",
+    imagen: "/partners/comercio-3.jpg",
+    vigencia: "Hasta el 31/03",
+  },
+  {
+    id: "partner-4",
+    nombre: "Comercio 4",
+    rubro: "Indumentaria",
+    descuento: "2x1",
+    detalle: "En prendas de temporada.",
+    imagen: "/partners/comercio-4.jpg",
+  },
+];

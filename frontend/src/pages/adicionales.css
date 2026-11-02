@@ -1,0 +1,185 @@
+.additional-services-section {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--color-bg);
+    padding-block-end: var(--space-xl);
+}
+
+.additional-services-route {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(120px, 20vw, 300px);
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    color: var(--color-primary-soft);
+    overflow: visible;
+}
+
+.additional-services-route-left {
+    left: 0;
+}
+
+.additional-services-route-right {
+    right: 0;
+    transform: scaleX(-1);
+}
+
+.additional-services-contours {
+    fill: none;
+    stroke: currentColor;
+    opacity: 0.16;
+}
+
+.additional-services-path {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 2 10;
+}
+
+.additional-services-car-body {
+    fill: var(--color-primary);
+}
+
+.additional-services-glass {
+    fill: var(--color-bg);
+    opacity: 0.85;
+}
+
+.additional-services-wheel {
+    fill: var(--color-secondary);
+}
+
+.additional-services-light {
+    fill: #ffe2b8;
+}
+
+.additional-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--space-ss);
+}
+
+.additional-services-head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.additional-services-icon {
+    display: grid;
+    place-items: center;
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
+    background: var(--color-primary-soft);
+    border: 1px solid rgba(252, 75, 8, 0.25);
+    color: var(--color-primary);
+    transition: background 0.35s ease, color 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
+}
+
+.additional-services-icon svg {
+    overflow: visible;
+}
+
+/* Los trazos del ícono se dibujan cuando la card entra (usa --visible de Card) */
+.additional-services-icon svg * {
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--visible, 0));
+    transition: stroke-dashoffset 1.2s ease;
+    transition-delay: calc(var(--delay, 0ms) + 350ms);
+}
+
+.additional-services-card:hover .additional-services-icon {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: rotate(-8deg) scale(1.1);
+    box-shadow: 0 10px 22px rgba(252, 75, 8, 0.35);
+}
+
+.additional-services-number {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(252, 75, 8, 0.3);
+    font-size: clamp(2.5rem, 1.9rem + 2vw, 4rem);
+    font-weight: 800;
+    line-height: 1;
+    transition: -webkit-text-stroke-color 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.additional-services-card:hover .additional-services-number {
+    -webkit-text-stroke-color: var(--color-primary);
+    transform: translateX(-6px);
+}
+
+.additional-services-tag {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    margin-bottom: var(--space-xs);
+    border-radius: 999px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-secondary-light);
+    font-size: clamp(0.7rem, 0.66rem + 0.17vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.additional-services-title {
+    position: relative;
+    z-index: 1;
+    margin-bottom: var(--space-xs);
+    color: var(--color-secondary);
+    font-size: clamp(0.95rem, 0.9rem + 0.27vw, 1.1rem);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.additional-services-text {
+    position: relative;
+    z-index: 1;
+    color: var(--color-text-light);
+    font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+    line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .additional-services-icon svg * {
+        stroke-dashoffset: 0;
+        transition: none;
+    }
+}
+
+/************ RESPONSIVE DESIGN *************/
+
+@media (max-width: 768px) {
+    .additional-services-route {
+        opacity: 0.45;
+    }
+}
+
+@media(max-width: 726px) {
+    .additional-services-section.container {
+        padding-inline: var(--space-mm);
+    }
+}
+
+@media(max-width: 600px) {
+    
+    .additional-services-route {
+        display: none;
+    }
+}
+
+@media(max-width: 510px) {
+    .additional-services-section.container {
+        padding-inline: var(--space-s);
+    }
+}

@@ -1,0 +1,311 @@
+.flota {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding-block-end: var(--space-xl);
+}
+
+/* ---------- Cabecera y filtros ---------- */
+
+.flota-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-top: 56px;
+}
+
+.flota-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: 18px;
+}
+
+.flota-chip {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.flota-chip:hover {
+  border-color: var(--color-secondary);
+}
+
+.flota-chip-activo {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+/* ---------- Grilla de autos ---------- */
+
+.flota-grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-ss);
+  padding-top: 28px;
+}
+
+.flota-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 350px;
+  min-width: 0;
+  border-radius: 22px;
+  background: var(--color-bg);
+  box-shadow: 0 1px 2px rgba(30, 30, 30, 0.06), 0 10px 28px rgba(30, 30, 30, 0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flota-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 2px var(--color-primary), 0 14px 32px rgba(30, 30, 30, 0.1);
+}
+
+.flota-img {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  background: linear-gradient(135deg, var(--color-bg), var(--color-border));
+}
+
+.flota-img img {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  object-fit: cover;
+}
+
+.flota-pill {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: var(--color-secondary);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.flota-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-s);
+  padding: 22px 22px 24px;
+}
+
+.flota-title {
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.flota-title h3 {
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.flota-title span {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  color: var(--color-text-light);
+}
+
+.flota-specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s);
+}
+
+.flota-specs li {
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+}
+
+.flota-specs svg {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.flota-prices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+.flota-prices>div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flota-desde {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.flota-price {
+  font-size: clamp(1.5rem, 1.3rem + 0.67vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+}
+
+.flota-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.flota-discount {
+    align-self: flex-start;
+    margin-bottom: var(--space-s);
+    padding: 0.35rem 0.75rem;
+    border-radius: 10px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary-active);
+    font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+    font-weight: 500;
+}
+
+.flota-discount strong {
+    color: var(--color-primary-active);
+    font-weight: 800;
+}
+
+.flota-total {
+  text-align: right;
+  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+  font-weight: 700;
+}
+
+/* ---------- Botón WhatsApp ---------- */
+
+.flota-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-s);
+  min-height: 52px;
+  padding: 0 20px;
+  border-radius: 14px;
+  background: var(--color-primary-active);
+  color: var(--color-text-on-primary);
+  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+  font-weight: 700;
+  transition: filter 0.15s ease;
+}
+
+.flota-btn:hover {
+  filter: brightness(0.92);
+}
+
+/* ---------- Banda final ---------- */
+
+.flota-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 48px;
+  padding: 40px;
+  border-radius: 24px;
+  background: var(--color-secondary);
+  color: var(--color-white);
+}
+
+.flota-cta-titulo {
+  margin-bottom: 8px;
+  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.flota-cta p {
+  max-width: 640px;
+  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+  line-height: 1.5;
+  color: var(--color-border);
+}
+
+.flota-btn-cta {
+  padding: 0 26px;
+}
+
+/************** RESPONSIVE DESIGN ***************/
+
+
+
+@media (max-width: 726px) {
+  .flota-wrapper.container {
+    padding-inline: var(--space-mm);
+  }
+}
+
+@media (max-width: 600px) {
+  .flota-header {
+    padding-top: 36px;
+  }
+
+  .flota-header h1 {
+    font-size: 36px;
+  }
+
+  .flota-grill {
+    grid-template-columns: 1fr;
+  }
+
+  .flota-cta {
+    padding: 28px 22px;
+  }
+
+  .flota-btn-cta {
+    width: 100%;
+  }
+}
+
+@media(max-width: 510px) {
+
+  .flota-wrapper.container {
+    padding-inline: var(--space-s)
+  }
+}
