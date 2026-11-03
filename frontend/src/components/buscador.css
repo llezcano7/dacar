@@ -142,6 +142,15 @@
   gap: var(--space-xs)
 }
 
+.bflota-group {
+  display: flex;
+  flex: 1 1 140px;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--color-border);
+}
 
 .bflota-group select,
 .bflota-group input {
