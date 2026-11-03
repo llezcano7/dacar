@@ -302,6 +302,23 @@
 
 /* ---------- RESPONSIVE DESIGN ---------- */
 
+
+@media (max-width: 1246px) {
+  .hero-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+    align-items: end;
+    gap: 12px;
+  }
+
+  .hero-field--lugar,
+  .hero-field--fecha,
+  .hero-field--hora {
+    flex: none;
+    width: 100%;
+  }
+}
+
 @media (max-width: 723px) {
 
   .hero-top.container,
