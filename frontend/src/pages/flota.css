@@ -50,19 +50,20 @@
 /* ---------- Grilla de autos ---------- */
 
 .flota-grilla {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-ss);
   padding-top: 28px;
 }
+
 
 .flota-card {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  margin-inline: auto;
-  width: 100%;
-  max-width: 350px;
+  flex: 1 1 320px;
+  max-width: 380px;
   min-width: 0;
   border-radius: 22px;
   background: var(--color-bg);
@@ -276,7 +277,6 @@
 /************** RESPONSIVE DESIGN ***************/
 
 
-
 @media (max-width: 726px) {
   .flota-wrapper.container {
     padding-inline: var(--space-mm);
@@ -303,6 +303,10 @@
   .flota-btn-cta {
     width: 100%;
   }
+
+  .flota-card {
+  max-width: 100%;
+}
 }
 
 @media(max-width: 510px) {
