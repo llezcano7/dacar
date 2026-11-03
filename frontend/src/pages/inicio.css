@@ -2,7 +2,7 @@
   --hero-gutter: clamp(16px, 5vw, 80px);
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   color: var(--color-secondary);
-  background: #fff;
+  background: var(--color-bg);
   padding-bottom: 56px;
 }
 

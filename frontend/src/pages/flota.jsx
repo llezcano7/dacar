@@ -3,11 +3,12 @@ import { useSearchParams } from "react-router-dom";
 import BuscadorFlota from "../components/buscador";
 import SeccionAnimada from "../components/seccionanimada.jsx";
 import { waLink } from "../config/contacto.js";
+import { armarBusqueda, mensajeWhatsapp } from "../config/cotizacion.js";
 import {
   flota as flotaPorDefecto,
   DESCUENTO_PAGO_ANTICIPADO,
-} from "../config/cars.js"; import "./flota.css";
-
+} from "../config/cars.js";
+import "./flota.css";
 
 const Icon = ({ children, size = 20 }) => (
   <svg
@@ -31,49 +32,12 @@ const aplicarDescuento = (precio, porcentaje) =>
 const formatoPrecio = (n) =>
   n == null ? "[$ / día]" : `$ ${n.toLocaleString("es-AR")}`;
 
-// "mié 21 oct · 10:00"
-const formatoFecha = (fecha, hora) => {
-  const d = new Date(`${fecha}T${hora}`);
-  const dia = d
-    .toLocaleDateString("es-AR", { weekday: "short", day: "numeric", month: "short" })
-    .replace(/[.,]/g, "");
-  return `${dia} · ${hora}`;
-};
-
-// Lee los datos que manda el buscador del Hero (/flota?fechaRetiro=...&...).
-// Devuelve null si se entra directo a /flota o si los datos no sirven.
-const leerBusqueda = (params) => {
-  const b = Object.fromEntries(params);
-  if (!b.fechaRetiro || !b.fechaDevolucion) return null;
-
-  const horaRetiro = b.horaRetiro || "10:00";
-  const horaDevolucion = b.horaDevolucion || "10:00";
-  const retiro = new Date(`${b.fechaRetiro}T${horaRetiro}`);
-  const devolucion = new Date(`${b.fechaDevolucion}T${horaDevolucion}`);
-  if (isNaN(retiro) || isNaN(devolucion) || devolucion <= retiro) return null;
-
-  return {
-    lugarRetiro: b.lugarRetiro,
-    lugarDevolucion: b.lugarDevolucion || b.lugarRetiro,
-    retiro: formatoFecha(b.fechaRetiro, horaRetiro),
-    devolucion: formatoFecha(b.fechaDevolucion, horaDevolucion),
-    // Períodos de 24 hs, redondeado hacia arriba
-    dias: Math.ceil((devolucion - retiro) / 86400000),
-  };
-};
-
-const mensajeCotizar = (auto, b) => {
-  const base = `Hola! Quiero cotizar el ${auto.modelo} (o similar).`;
-  if (!b) return base;
-  return `${base} Retiro: ${b.lugarRetiro}, ${b.retiro}. Devolución: ${b.lugarDevolucion}, ${b.devolucion} (${b.dias} días).`;
-};
-
-// autos: lista de la flota. Hoy viene de config/contenido.js; luego, del back.
+// autos: lista de la flota. Hoy viene de config/cars.js; luego, del back.
 // minDias: mínimo de días de alquiler (más adelante viene del back, igual que en Hero)
 export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
   const [cat, setCat] = useState("todos");
   const [params, setParams] = useSearchParams();
-  const busqueda = leerBusqueda(params);
+  const busqueda = armarBusqueda(Object.fromEntries(params));
 
   const visibles = autos.filter((a) => cat === "todos" || a.cat === cat);
 
@@ -95,13 +59,16 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
         </SeccionAnimada>
       </div>
       <section className="flota-wrapper container">
-
         <div className="flota-grilla">
           {visibles.map((a) => {
-            const total =
-              busqueda && a.precioDia != null ? a.precioDia * busqueda.dias : null;
             const descuento = a.descuento ?? DESCUENTO_PAGO_ANTICIPADO;
             const hayDescuento = descuento > 0 && a.precioDia != null;
+            // El total usa el precio por día con descuento, igual al que se muestra abajo
+            const precioFinalDia = hayDescuento
+              ? aplicarDescuento(a.precioDia, descuento)
+              : a.precioDia;
+            const total =
+              busqueda && precioFinalDia != null ? precioFinalDia * busqueda.dias : null;
 
             return (
               <article key={a.id} className="flota-card">
@@ -158,7 +125,9 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                     </div>
                     {total != null && (
                       <div className="flota-total">
-                        <span className="flota-desde">Total {busqueda.dias} días</span>
+                        <span className="flota-desde">
+                          Total {busqueda.dias} días{hayDescuento ? ` (-${descuento}%)` : ""}
+                        </span>
                         <span>{formatoPrecio(total)}</span>
                       </div>
                     )}
@@ -172,7 +141,7 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                   )}
 
                   <a
-                    href={waLink(mensajeCotizar(a, busqueda))}
+                    href={waLink(mensajeWhatsapp(a, busqueda))}
                     className="flota-btn"
                     target="_blank"
                     rel="noreferrer"

@@ -120,7 +120,7 @@ export default function Footer() {
           <h3 className="footer-title uppercase">Contacto</h3>
           <ul className="footer-list footer-list--contact">
             <li>San Carlos de Bariloche, Río Negro</li>
-            <li> <a href="https://www.google.com/maps/place/Quaglia+161,+San+Carlos+de+Bariloche,+R%C3%ADo+Negro/@-41.306111, -71.548611, 17z/data=!3m1!4b1!4m5!3m4!1s0xb352c9d8d8d8d8d8:0x8d8d8d8d8d8d8d8d!8m2!3d-41.306111!4d-71.548611">Quaglia 161, CP 8400</a></li>
+            <li> <a className="footer-link" href="https://www.google.com/maps/place/Quaglia+161,+San+Carlos+de+Bariloche,+R%C3%ADo+Negro/@-41.306111, -71.548611, 17z/data=!3m1!4b1!4m5!3m4!1s0xb352c9d8d8d8d8d8:0x8d8d8d8d8d8d8d8d!8m2!3d-41.306111!4d-71.548611">Quaglia 161, CP 8400</a></li>
             <li><a className="footer-link" href="tel:+540000000000">+54 9 2944585451</a></li>
             <li><a className="footer-link" href="mailto:info@dacar.com.ar">reservas@dacarrentacar.com</a></li>
             <li>Lun a Dom · 9:00 a 18:00</li>

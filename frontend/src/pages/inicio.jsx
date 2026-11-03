@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CarGallery from "../components/cargallery";
+import { armarBusqueda } from "../config/cotizacion.js";
 import "./inicio.css";
 
 // Página que lista los autos disponibles (misma pestaña)
@@ -127,6 +128,11 @@ export default function Hero({ minDias = 3 }) {
     navigate(`${FLOTA_URL}?${params}`);
   };
 
+  const busqueda = armarBusqueda({
+    ...f,
+    lugarDevolucion: mismoLugar ? f.lugarRetiro : f.lugarDevolucion,
+  });
+
   return (
     <section className="hero">
       <div className="hero-top container">
@@ -156,7 +162,7 @@ export default function Hero({ minDias = 3 }) {
               <span className="hero-eyebrow">Alquiler de autos en Bariloche</span>
             </div>
             <h1 className="hero-title">
-                Viajá <span>a tu ritmo</span>
+              Viajá <span>a tu ritmo</span>
             </h1>
             <p>
               Autos listos y equipados para recorrer Ruta 40, Circuito Chico, Cerro
@@ -278,8 +284,8 @@ export default function Hero({ minDias = 3 }) {
         </form>
       </div>
 
-      <CarGallery />
-
+      <CarGallery busqueda={busqueda} />
+      
     </section>
   );
 }

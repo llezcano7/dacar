@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { clausulas } from "../config/clausulas";
 import "./terminos&condiciones.css";
+import { waLink } from "../config/contacto"
 
 
-function Terminos() {
+export default function Terminos() {
     return (
         <>
             <section className="terms-hero container">
@@ -59,14 +60,12 @@ function Terminos() {
                                 Escribinos antes de reservar y te respondemos a la brevedad.
                             </p>
                         </div>
-                        <Link className="terms-help-button" to="/#contact">
+                        <a href={waLink("Hola! Tengo una consulta sobre los términos y condiciones.")} className="terms-help-button" target="_blank" rel="noreferrer">
                             Contactanos
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </section>
         </>
     );
 }
-
-export default Terminos;

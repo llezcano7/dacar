@@ -1,6 +1,7 @@
 import SeccionAnimada from "../components/seccionanimada";
 import Card from "../components/card";
-import {
+import { waLink } from "../config/contacto.js";
+import { mensajeWhatsapp } from "../config/cotizacion.js"; import {
   flota,
   DESCUENTO_PAGO_ANTICIPADO,
   CARACTERISTICAS_COMUNES,
@@ -29,7 +30,7 @@ const caracteristicas = (car) => [
 const DESDE_X = [-50, 0, 50];
 
 // cars es opcional: más adelante se puede pasar desde una API o dashboard
-export default function CarGallery({ onReserve, cars = flota }) {
+export default function CarGallery({ cars = flota, busqueda = null }) {
   return (
     <div className=" car-gallery-section container block-start">
       <SeccionAnimada
@@ -87,10 +88,11 @@ export default function CarGallery({ onReserve, cars = flota }) {
                     ))}
                   </ul>
 
-                  <button
-                    type="button"
+                  <a
+                    href={waLink(mensajeWhatsapp(car, busqueda, "reservar"))}
                     className="car-card-btn"
-                    onClick={() => (onReserve ? onReserve(car) : null)}
+                    target="_blank"
+                    rel="noreferrer"
                   >
                     Reservar ahora
                     <svg
@@ -107,7 +109,7 @@ export default function CarGallery({ onReserve, cars = flota }) {
                     >
                       <path d="M5 12h14M13 6l6 6-6 6" />
                     </svg>
-                  </button>
+                  </a>
                 </div>
               </Card>
             );
