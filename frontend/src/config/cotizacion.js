@@ -29,7 +29,7 @@ export const armarBusqueda = (b) => {
   };
 };
 
-export const mensajeWhatsapp = (auto, b, accion = "cotizar") => {
+export const mensajeWhatsapp = (auto, b, accion = "contratar") => {
   const base = `Hola! Quiero ${accion} el ${auto.modelo} (o similar).`;
   if (!b) return base;
   return `${base} Retiro: ${b.lugarRetiro}, ${b.retiro}. Devolución: ${b.lugarDevolucion}, ${b.devolucion} (${dias(b.dias)}).`;

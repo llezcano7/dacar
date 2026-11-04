@@ -12,6 +12,16 @@ export const categorias = [
 // Descuento por pago anticipado (%). Un auto puede pisarlo con su propio "descuento".
 export const DESCUENTO_PAGO_ANTICIPADO = 20;
 
+// IVA que se suma al alquiler (%)
+export const IVA = 21;
+
+// Un solo lugar para el cálculo, así Flota y CarGallery nunca difieren
+export const calcularPrecio = (precio, descuento = 0) => {
+  const conDescuento = Math.round(precio * (1 - descuento / 100));
+  const iva = Math.round(conDescuento * (IVA / 100));
+  return { conDescuento, iva, final: conDescuento + iva };
+};
+
 // Características que comparten todos los autos (un auto puede pisarlas con "extras")
 export const CARACTERISTICAS_COMUNES = [
    { icon: "❄️", label: "Aire acondicionado" },

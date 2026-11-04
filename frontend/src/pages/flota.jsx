@@ -7,6 +7,8 @@ import { armarBusqueda, mensajeWhatsapp } from "../config/cotizacion.js";
 import {
   flota as flotaPorDefecto,
   DESCUENTO_PAGO_ANTICIPADO,
+  IVA,
+  calcularPrecio,
 } from "../config/cars.js";
 import "./flota.css";
 
@@ -26,11 +28,8 @@ const Icon = ({ children, size = 20 }) => (
   </svg>
 );
 
-const aplicarDescuento = (precio, porcentaje) =>
-  Math.round(precio * (1 - porcentaje / 100));
-
 const formatoPrecio = (n) =>
-  n == null ? "[$ / día]" : `$ ${n.toLocaleString("es-AR")}`;
+  n == null ? "[$ / día]" : `$\u00A0${n.toLocaleString("es-AR")}`;
 
 // autos: lista de la flota. Hoy viene de config/cars.js; luego, del back.
 // minDias: mínimo de días de alquiler (más adelante viene del back, igual que en Hero)
@@ -63,12 +62,13 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
           {visibles.map((a) => {
             const descuento = a.descuento ?? DESCUENTO_PAGO_ANTICIPADO;
             const hayDescuento = descuento > 0 && a.precioDia != null;
-            // El total usa el precio por día con descuento, igual al que se muestra abajo
-            const precioFinalDia = hayDescuento
-              ? aplicarDescuento(a.precioDia, descuento)
-              : a.precioDia;
+            const precio =
+              a.precioDia != null
+                ? calcularPrecio(a.precioDia, hayDescuento ? descuento : 0)
+                : null;
+            // El total usa el precio final por día (con descuento e IVA)
             const total =
-              busqueda && precioFinalDia != null ? precioFinalDia * busqueda.dias : null;
+              busqueda && precio ? precio.final * busqueda.dias : null;
 
             return (
               <article key={a.id} className="flota-card">
@@ -85,61 +85,74 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                   </div>
 
                   <ul className="flota-specs">
-                    <li>
-                      <Icon>
+                    <li className="flota-spec">
+                      <Icon size={18}>
                         <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
                         <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
                       </Icon>
-                      {a.pasajeros} pasajeros
+                      <span>{a.pasajeros}</span>
                     </li>
-                    <li>
-                      <Icon>
+                    <li className="flota-spec">
+                      <Icon size={18}>
                         <rect x="6" y="7" width="12" height="14" rx="2" />
                         <path d="M9 7V5a3 3 0 016 0v2M10 12v5M14 12v5" />
                       </Icon>
-                      {a.valijas} valijas
+                      <span>{a.valijas}</span>
                     </li>
-                    <li>
-                      <Icon>
+                    <li className="flota-spec">
+                      <Icon size={18}>
                         <circle cx="7" cy="4" r="1.5" />
                         <circle cx="17" cy="4" r="1.5" />
                         <circle cx="7" cy="20" r="1.5" />
                         <circle cx="17" cy="20" r="1.5" />
                         <path d="M7 5.5v13M17 5.5v13M7 12h10" />
                       </Icon>
-                      {a.transmision}
+                      <span>{a.transmision}</span>
                     </li>
-                    <li>
-                      <Icon>
+                    <li className="flota-spec">
+                      <Icon size={18}>
                         <path d="M12 2v20M4.9 6.5l14.2 11M19.1 6.5L4.9 17.5M9 4l3 2 3-2M9 20l3-2 3 2" />
                       </Icon>
-                      Aire acond.
+                      <span>A/C</span>
                     </li>
                   </ul>
 
-                  <div className="flota-prices">
-                    <div>
-                      <span className="flota-desde">Desde</span>
-                      <span className="flota-price">{formatoPrecio(a.precioDia)}</span>
-                    </div>
-                    {total != null && (
-                      <div className="flota-total">
-                        <span className="flota-desde">
-                          Total {busqueda.dias} días{hayDescuento ? ` (-${descuento}%)` : ""}
-                        </span>
-                        <span>{formatoPrecio(total)}</span>
+                  {precio && (
+                    <div className="flota-breakdown">
+                      {hayDescuento ? (
+                        <>
+                          <div className="flota-line">
+                            <span>Precio por día</span>
+                            <span className="flota-line-old">{formatoPrecio(a.precioDia)}</span>
+                          </div>
+                          <div className="flota-line flota-line-discount">
+                            <span>Pago anticipado (-{descuento}%)</span>
+                            <span>{formatoPrecio(precio.conDescuento)}</span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="flota-line">
+                          <span>Precio por día</span>
+                          <span>{formatoPrecio(precio.conDescuento)}</span>
+                        </div>
+                      )}
+                      <div className="flota-line">
+                        <span>IVA ({IVA}%)</span>
+                        <span>{formatoPrecio(precio.iva)}</span>
                       </div>
-                    )}
-                  </div>
-
-                  {hayDescuento && (
-                    <p className="flota-discount">
-                      Pagando por adelantado:{" "}
-                      <strong>{formatoPrecio(aplicarDescuento(a.precioDia, descuento))} / día</strong>
-                    </p>
+                      <div className="flota-line flota-line-final">
+                        <span>Final por día</span>
+                        <strong>{formatoPrecio(precio.final)}</strong>
+                      </div>
+                    </div>
                   )}
-
+                  {total != null && (
+                    <div className="flota-trip">
+                      <span>Total {busqueda.dias} días · IVA incl.</span>
+                      <strong>{formatoPrecio(total)}</strong>
+                    </div>
+                  )}
                   <a
                     href={waLink(mensajeWhatsapp(a, busqueda))}
                     className="flota-btn"
@@ -149,7 +162,7 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                     <Icon size={22}>
                       <path d="M4 5h16v11H9l-5 4V5z" />
                     </Icon>
-                    Cotizar por WhatsApp
+                    Contratar por WhatsApp
                     <Icon size={20}>
                       <path d="M5 12h14M13 6l6 6-6 6" />
                     </Icon>

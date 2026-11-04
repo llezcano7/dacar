@@ -136,53 +136,93 @@
 
 .flota-specs {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-s);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
 }
 
-.flota-specs li {
-  color: var(--color-text);
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
-  font-weight: 600;
-}
-
-.flota-specs svg {
-  flex-shrink: 0;
-  color: var(--color-primary);
-}
-
-.flota-prices {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 18px;
-  border-top: 1px solid var(--color-border);
-  color: var(--color-primary)
-}
-
-.flota-prices>div {
+.flota-spec {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-
-.flota-desde {
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  color: var(--color-text-light);
   font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
   font-weight: 600;
-  color: var(--color-text-light);
+  text-align: center;
 }
 
-.flota-price {
-  font-size: clamp(1.5rem, 1.3rem + 0.67vw, 1.9rem);
+.flota-spec + .flota-spec {
+  border-left: 1px solid var(--color-border);
+}
+
+.flota-spec svg {
+  stroke: var(--color-primary-hover);
+}
+
+.flota-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.flota-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  color: var(--color-text);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+}
+
+.flota-line-old {
+  text-decoration: line-through;
+}
+
+.flota-line-final {
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
   font-weight: 700;
-  letter-spacing: -0.02em;
+}
+
+.flota-line-final strong {
   color: var(--color-primary);
+  font-size: clamp(1.5rem, 1.3rem + 0.67vw, 1.9rem);
+  letter-spacing: -0.02em;
+}
+
+.flota-trip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-active);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+}
+
+.flota-trip strong {
+  font-weight: 800;
+}
+
+/* El reset pinta cada elemento: los hijos tienen que heredar el color del padre */
+.flota-spec span,
+.flota-line span,
+.flota-trip span,
+.flota-trip strong {
+  color: inherit;
+}
+
+.flota-line.flota-line-discount span {
+  color: var(--color-primary);
+  font-weight: 700;
 }
 
 .flota-badge {
@@ -197,28 +237,6 @@
   color: var(--color-bg);
 }
 
-.flota-discount {
-    align-self: flex-start;
-    margin-bottom: var(--space-s);
-    padding: 0.35rem 0.75rem;
-    border-radius: 10px;
-    background: var(--color-primary-soft);
-    color: var(--color-primary-active);
-    font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
-    font-weight: 500;
-}
-
-.flota-discount strong {
-    color: var(--color-primary-active);
-    font-weight: 800;
-}
-
-.flota-total span {
-  text-align: right;
-  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
-  font-weight: 700;
-  color: var(--color-success);
-}
 
 /* ---------- Botón WhatsApp ---------- */
 
@@ -230,7 +248,7 @@
   min-height: 52px;
   padding: 0 20px;
   border-radius: 14px;
-  background: var(--color-primary-active);
+  background: var(--color-primary-hover);
   color: var(--color-text-on-primary);
   font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
   font-weight: 700;
