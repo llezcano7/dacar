@@ -255,6 +255,7 @@
 .hero-field input,
 .hero-field select {
   width: 100%;
+  min-width: 0;
   height: 52px;
   padding: 0 14px;
   border: 1.5px solid #d4d4d4;
@@ -265,10 +266,25 @@
   font-weight: 600;
   color: var(--color-secondary);
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .hero-field-input,
-.hero-field-select:hover {}
+.hero-field-select:hover {
+  color: var(--color-border-hover);
+}
+
+.hero-field input[type="date"] {
+  display: block;
+  text-align: left;
+  -webkit-min-logical-width: calc(100% - 28px);
+}
+
+.hero-field input::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.2em;
+}
 
 .hero-buscar {
   flex: 1 1 200px;
