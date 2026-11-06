@@ -2,41 +2,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CarGallery from "../components/cargallery";
 import { armarBusqueda } from "../config/cotizacion.js";
+import {
+  LUGARES,
+  HORAS,
+  hoy,
+  sumarDias,
+  dias,
+  validarBusqueda,
+} from "../config/busqueda.js";
 import "./inicio.css";
 
 // Página que lista los autos disponibles (misma pestaña)
 const FLOTA_URL = "/flota";
-
-const LUGARES = [
-  "Aeropuerto BRC",
-  "Centro de Bariloche",
-  "San Martin de los Andes",
-  "Otros puntos de entrega",
-];
-
-// 07:00, 07:30 ... 22:30
-const HORAS = Array.from({ length: 32 }, (_, i) => {
-  const h = 7 + Math.floor(i / 2);
-  return `${String(h).padStart(2, "0")}:${i % 2 ? "30" : "00"}`;
-});
-
-// Fecha de hoy en formato yyyy-mm-dd, en hora local
-const hoy = () => {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
-};
-
-// Suma n días a una fecha yyyy-mm-dd, en hora local (respeta fin de mes y de año)
-const sumarDias = (iso, n) => {
-  const [y, m, d] = iso.split("-").map(Number);
-  const dt = new Date(y, m - 1, d + n);
-  const mm = String(dt.getMonth() + 1).padStart(2, "0");
-  const dd = String(dt.getDate()).padStart(2, "0");
-  return `${dt.getFullYear()}-${mm}-${dd}`;
-};
-
-const dias = (n) => `${n} ${n === 1 ? "día" : "días"}`;
 
 const Icon = ({ size = 20, stroke = 2, children }) => (
   <svg
@@ -77,6 +54,12 @@ export default function Hero({ minDias = 3 }) {
     horaDevolucion: "10:00",
   });
 
+  // Datos de la búsqueda con el lugar de devolución ya resuelto
+  const datos = {
+    ...f,
+    lugarDevolucion: mismoLugar ? f.lugarRetiro : f.lugarDevolucion,
+  };
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setF((prev) => {
@@ -104,34 +87,17 @@ export default function Hero({ minDias = 3 }) {
   const onSubmit = (e) => {
     e.preventDefault(); // frena el envío nativo del form
 
-    const retiro = new Date(`${f.fechaRetiro}T${f.horaRetiro}`);
-    const devolucion = new Date(`${f.fechaDevolucion}T${f.horaDevolucion}`);
-    // El mínimo se cuenta en períodos de 24 hs desde el retiro:
-    // retiro lunes 10:00 + 3 días => devolución desde el jueves 10:00
-    const minimo = new Date(retiro);
-    minimo.setDate(minimo.getDate() + minDias);
-
-    if (devolucion <= retiro) {
-      setError("La devolución tiene que ser posterior al retiro.");
-      return;
-    }
-    if (devolucion < minimo) {
-      setError(`El alquiler mínimo es de ${dias(minDias)} (${minDias * 24} hs).`);
+    const mensaje = validarBusqueda(datos, minDias);
+    if (mensaje) {
+      setError(mensaje);
       return;
     }
 
     setError("");
-    const params = new URLSearchParams({
-      ...f,
-      lugarDevolucion: mismoLugar ? f.lugarRetiro : f.lugarDevolucion,
-    });
-    navigate(`${FLOTA_URL}?${params}`);
+    navigate(`${FLOTA_URL}?${new URLSearchParams(datos)}`);
   };
 
-  const busqueda = armarBusqueda({
-    ...f,
-    lugarDevolucion: mismoLugar ? f.lugarRetiro : f.lugarDevolucion,
-  });
+  const busqueda = armarBusqueda(datos);
 
   return (
     <section className="hero">
@@ -285,7 +251,6 @@ export default function Hero({ minDias = 3 }) {
       </div>
 
       <CarGallery busqueda={busqueda} />
-      
     </section>
   );
 }

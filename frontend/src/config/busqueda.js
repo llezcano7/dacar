@@ -4,7 +4,10 @@ export const LUGARES = [
   "Aeropuerto BRC",
   "Centro de Bariloche",
   "San Martin de los Andes",
-  "Otros puntos de entrega",
+  "Calafate",
+  "Usuhaia",
+  "Otros destinos",
+  
 ];
 
 // 07:00, 07:30 ... 22:30
