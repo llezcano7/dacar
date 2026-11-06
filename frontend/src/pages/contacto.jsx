@@ -35,7 +35,7 @@ export default function Contacto() {
       e.preventDefault();
       setEstado("enviando");
       try {
-         const res = await fetch(`${import.meta.env.VITE_API_URL}/contacto`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/contacto.php`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(f),
