@@ -9,9 +9,6 @@ export const categorias = [
    { id: "4x4", nombre: "Camionetas 4x4" },
 ];
 
-// Descuento por pago anticipado (%). Un auto puede pisarlo con su propio "descuento".
-export const DESCUENTO_PAGO_ANTICIPADO = 20;
-
 // IVA que se suma al alquiler (%)
 export const IVA = 21;
 

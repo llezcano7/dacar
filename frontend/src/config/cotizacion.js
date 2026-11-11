@@ -23,6 +23,7 @@ export const armarBusqueda = (b) => {
   return {
     lugarRetiro: b.lugarRetiro,
     lugarDevolucion: b.lugarDevolucion || b.lugarRetiro,
+    fechaRetiro: b.fechaRetiro, // "AAAA-MM-DD", para tarifas y promociones
     retiro: formatoFecha(b.fechaRetiro, horaRetiro),
     devolucion: formatoFecha(b.fechaDevolucion, horaDevolucion),
     dias: Math.ceil((devolucion - retiro) / 86400000),

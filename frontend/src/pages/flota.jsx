@@ -4,12 +4,9 @@ import BuscadorFlota from "../components/buscador";
 import SeccionAnimada from "../components/seccionanimada.jsx";
 import { waLink } from "../config/contacto.js";
 import { armarBusqueda, mensajeWhatsapp } from "../config/cotizacion.js";
-import {
-  flota as flotaPorDefecto,
-  DESCUENTO_PAGO_ANTICIPADO,
-  IVA,
-  calcularPrecio,
-} from "../config/cars.js";
+import { flota as flotaPorDefecto, IVA, calcularPrecio } from "../config/cars.js";
+import { getPrecioDia } from "../config/tarifas.js";
+import { getPromocion } from "../config/promociones.js";
 import "./flota.css";
 
 const Icon = ({ children, size = 20 }) => (
@@ -30,6 +27,7 @@ const Icon = ({ children, size = 20 }) => (
 
 const formatoPrecio = (n) =>
   n == null ? "[$ / día]" : `$\u00A0${n.toLocaleString("es-AR")}`;
+
 
 // autos: lista de la flota. Hoy viene de config/cars.js; luego, del back.
 // minDias: mínimo de días de alquiler (más adelante viene del back, igual que en Hero)
@@ -60,15 +58,13 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
       <section className="flota-wrapper container">
         <div className="flota-grilla">
           {visibles.map((a) => {
-            const descuento = a.descuento ?? DESCUENTO_PAGO_ANTICIPADO;
-            const hayDescuento = descuento > 0 && a.precioDia != null;
-            const precio =
-              a.precioDia != null
-                ? calcularPrecio(a.precioDia, hayDescuento ? descuento : 0)
-                : null;
-            // El total usa el precio final por día (con descuento e IVA)
-            const total =
-              busqueda && precio ? precio.final * busqueda.dias : null;
+            const fecha = busqueda?.fechaRetiro;
+            const precioDia = getPrecioDia(a, fecha);
+            const promo = getPromocion(a, fecha);
+            const descuento = promo?.descuento ?? 0;
+            const hayDescuento = descuento > 0 && precioDia != null;
+            const precio = precioDia != null ? calcularPrecio(precioDia, descuento) : null;
+             const total = busqueda && precio ? precio.final * busqueda.dias : null;
 
             return (
               <article key={a.id} className="flota-card">
@@ -124,10 +120,10 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                         <>
                           <div className="flota-line">
                             <span>Precio por día</span>
-                            <span className="flota-line-old">{formatoPrecio(a.precioDia)}</span>
+                            <span className="flota-line-old">{formatoPrecio(precioDia)}</span>
                           </div>
                           <div className="flota-line flota-line-discount">
-                            <span>Pago anticipado (-{descuento}%)</span>
+                            <span>Pago anticipado {promo.nombre} (-{descuento}%)</span>
                             <span>{formatoPrecio(precio.conDescuento)}</span>
                           </div>
                         </>

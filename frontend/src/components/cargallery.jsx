@@ -2,12 +2,9 @@ import SeccionAnimada from "../components/seccionanimada";
 import Card from "../components/card";
 import { waLink } from "../config/contacto.js";
 import { mensajeWhatsapp } from "../config/cotizacion.js";
-import {
-  flota,
-  DESCUENTO_PAGO_ANTICIPADO,
-  IVA,
-  calcularPrecio,
-} from "../config/cars";
+import { flota, IVA, calcularPrecio } from "../config/cars";
+import { getPrecioDia } from "../config/tarifas.js";
+import { getPromocion } from "../config/promociones.js";
 import "./cargallery.css";
 
 const formatPrice = (n) =>
@@ -17,9 +14,7 @@ const formatPrice = (n) =>
     maximumFractionDigits: 0,
   }).format(n);
 
-const precio = Number(Card.precioDia);
-const descuento = Card.descuento ?? DESCUENTO_PAGO_ANTICIPADO;
-const calculo = calcularPrecio(precio, descuento);
+
 
 // Arma la lista de características a partir de los datos del auto
 const caracteristicas = (car) => [
@@ -61,8 +56,11 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
       >
         <section className="car-gallery-grid">
           {cars.map((car, i) => {
-            const descuento = car.descuento ?? DESCUENTO_PAGO_ANTICIPADO;
-            const calculo = calcularPrecio(Number(car.precioDia), descuento);
+            const fecha = busqueda?.fechaRetiro;
+            const precioDia = getPrecioDia(car, fecha);
+            const promo = getPromocion(car, fecha);
+            const descuento = promo?.descuento ?? 0;
+            const calculo = calcularPrecio(precioDia ?? 0, descuento);
             const total = busqueda ? calculo.final * busqueda.dias : null;
 
             return (
@@ -121,10 +119,10 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
                       <>
                         <div className="car-card-line">
                           <span>Precio por día</span>
-                          <span className="car-card-line-old">{formatPrice(car.precioDia)}</span>
+                          <span className="car-card-line-old">{formatPrice(precioDia)}</span>
                         </div>
                         <div className="car-card-line car-card-line-discount">
-                          <span>Pago anticipado (-{descuento}%)</span>
+                          <span>Pago anticipado {promo.nombre} (-{descuento}%)</span>
                           <span>{formatPrice(calculo.conDescuento)}</span>
                         </div>
                       </>
