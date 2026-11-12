@@ -15,6 +15,11 @@ export const tarifas = {
   ],
 };
 
+export const REGLAS_HORAS = {
+  toleranciaMin: 30, // hasta 30 min pasadas las 24 h no se cobra nada
+  maxHorasExtra: 5,  // pasadas estas horas se cobra el día completo
+};
+
 export const hoyISO = () => new Date().toLocaleDateString("sv-SE");
 
 // Precio por día para una fecha (por defecto, hoy). Un auto puede pisar

@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import BuscadorFlota from "../components/buscador";
 import SeccionAnimada from "../components/seccionanimada.jsx";
 import { waLink } from "../config/contacto.js";
-import { armarBusqueda, mensajeWhatsapp } from "../config/cotizacion.js";
+import { armarBusqueda, mensajeWhatsapp, calcularTotal } from "../config/cotizacion.js";
 import { flota as flotaPorDefecto, IVA, calcularPrecio } from "../config/cars.js";
 import { getPrecioDia } from "../config/tarifas.js";
 import { getPromocion } from "../config/promociones.js";
@@ -64,7 +64,7 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
             const descuento = promo?.descuento ?? 0;
             const hayDescuento = descuento > 0 && precioDia != null;
             const precio = precioDia != null ? calcularPrecio(precioDia, descuento) : null;
-             const total = busqueda && precio ? precio.final * busqueda.dias : null;
+            const total = busqueda && precio ? calcularTotal(precio.final, busqueda) : null;
 
             return (
               <article key={a.id} className="flota-card">
@@ -145,7 +145,7 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                   )}
                   {total != null && (
                     <div className="flota-trip">
-                      <span>Total {busqueda.dias} días · IVA incl.</span>
+                      <span>Total {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.</span>
                       <strong>{formatoPrecio(total)}</strong>
                     </div>
                   )}

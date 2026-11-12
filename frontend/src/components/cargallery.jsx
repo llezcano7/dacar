@@ -1,7 +1,7 @@
 import SeccionAnimada from "../components/seccionanimada";
 import Card from "../components/card";
 import { waLink } from "../config/contacto.js";
-import { mensajeWhatsapp } from "../config/cotizacion.js";
+import { mensajeWhatsapp, calcularTotal } from "../config/cotizacion.js";
 import { flota, IVA, calcularPrecio } from "../config/cars";
 import { getPrecioDia } from "../config/tarifas.js";
 import { getPromocion } from "../config/promociones.js";
@@ -61,7 +61,7 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
             const promo = getPromocion(car, fecha);
             const descuento = promo?.descuento ?? 0;
             const calculo = calcularPrecio(precioDia ?? 0, descuento);
-            const total = busqueda ? calculo.final * busqueda.dias : null;
+            const total = busqueda ? calcularTotal(calculo.final, busqueda) : null;
 
             return (
               <Card
@@ -144,11 +144,9 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
 
                   {total != null && (
                     <div className="car-card-trip">
-                      <span>Total {busqueda.dias} días · IVA incl.</span>
-                      <strong>{formatPrice(total)}</strong>
+                      <span>Total {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.</span>                      <strong>{formatPrice(total)}</strong>
                     </div>
                   )}
-
                   <a
                     href={waLink(mensajeWhatsapp(car, busqueda, "reservar"))}
                     className="car-card-btn"
