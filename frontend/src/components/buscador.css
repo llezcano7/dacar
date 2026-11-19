@@ -222,6 +222,57 @@
   filter: brightness(0.92);
 }
 
+/* ===== Agregar al FINAL de buscador.css ===== */
+.bflota-extras {
+  margin-top: var(--space-4, 16px);
+}
+
+.bflota-extras-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 8px;
+}
+
+.bflota-extra {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--secondary-color);
+}
+
+.bflota-extra input {
+  accent-color:var(--color-primary);
+}
+
+.bflota-avisos {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--color-bg);
+}
+
+.bflota-avisos li {
+  color: #b33600;
+  font-size: 0.9rem;
+}
+
+/* ===== Agregar al FINAL de inicio.css (el css del Hero) ===== */
+.hero-avisos {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #fff3ee;
+}
+
+.hero-avisos li {
+  color: #b33600;
+  font-size: 0.9rem;
+}
+
 @media(max-width: 726px) {
   .bflota-wrap.container {
     padding-inline: var(--space-mm)

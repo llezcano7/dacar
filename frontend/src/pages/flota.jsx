@@ -3,7 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import BuscadorFlota from "../components/buscador";
 import SeccionAnimada from "../components/seccionanimada.jsx";
 import { waLink } from "../config/contacto.js";
-import { armarBusqueda, mensajeWhatsapp, calcularTotal } from "../config/cotizacion.js";
+import { armarBusqueda, mensajeWhatsapp, calcularTotalConAdicionales } from "../config/cotizacion.js";
+import { etiquetaRenglon } from "../config/calculoAdicionales.js";
 import { flota as flotaPorDefecto, IVA, calcularPrecio } from "../config/cars.js";
 import { getPrecioDia } from "../config/tarifas.js";
 import { getPromocion } from "../config/promociones.js";
@@ -64,7 +65,10 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
             const descuento = promo?.descuento ?? 0;
             const hayDescuento = descuento > 0 && precioDia != null;
             const precio = precioDia != null ? calcularPrecio(precioDia, descuento) : null;
-            const total = busqueda && precio ? calcularTotal(precio.final, busqueda) : null;
+            const detalle = busqueda && precio
+              ? calcularTotalConAdicionales(precio.final, busqueda, { categoria: a.cat })
+              : null;
+            const total = detalle?.total ?? null;
 
             return (
               <article key={a.id} className="flota-card">
@@ -143,6 +147,20 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                       </div>
                     </div>
                   )}
+                  {detalle?.renglones.length > 0 && (
+                    <div className="flota-breakdown">
+                      <div className="flota-line">
+                        <span>Alquiler {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`}</span>
+                        <span>{formatoPrecio(detalle.tarifa)}</span>
+                      </div>
+                      {detalle.renglones.map((r, i) => (
+                        <div className="flota-line" key={`${r.id}-${r.evento}-${i}`}>
+                          <span>{etiquetaRenglon(r)}</span>
+                          <span>{formatoPrecio(r.monto)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   {total != null && (
                     <div className="flota-trip">
                       <span>Total {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.</span>
@@ -150,7 +168,7 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                     </div>
                   )}
                   <a
-                    href={waLink(mensajeWhatsapp(a, busqueda))}
+                    href={waLink(mensajeWhatsapp(a, busqueda, "contratar", detalle))}
                     className="flota-btn"
                     target="_blank"
                     rel="noreferrer"

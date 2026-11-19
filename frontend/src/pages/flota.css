@@ -173,7 +173,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-xs);
-  color: var(--color-text);
+  color: var(--color-text-light);
   font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
 }
 

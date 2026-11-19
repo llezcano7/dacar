@@ -1,4 +1,5 @@
 import SeccionAnimada from "../components/seccionanimada";
+import { textoPrecio } from "../config/calculoAdicionales.js";
 import Card from "../components/card";
 import { adicionales as adicionalesPorDefecto } from "../config/adicionales";
 import "./adicionales.css";
@@ -51,23 +52,23 @@ const iconos = {
     </Icon>
   ),
   driver: (
-  <Icon>
-    <circle pathLength={1} cx="9" cy="8" r="3.5" />
-    <path pathLength={1} d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1" />
-    <path pathLength={1} d="M19 8v6M16 11h6" />
-  </Icon>
-),
-custom: (
-  <Icon>
-    <path pathLength={1} d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4" />
-    <path pathLength={1} d="M14 3l5 5v3" />
-    <path pathLength={1} d="M14 3v5h5" />
-    <path pathLength={1} d="M8.5 12h4" />
-    <path pathLength={1} d="M8.5 16h2" />
-    <circle pathLength={1} cx="16.5" cy="17" r="4" />
-    <path pathLength={1} d="m14.8 17 1.2 1.2 2.2-2.4" />
-  </Icon>
-),
+    <Icon>
+      <circle pathLength={1} cx="9" cy="8" r="3.5" />
+      <path pathLength={1} d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1" />
+      <path pathLength={1} d="M19 8v6M16 11h6" />
+    </Icon>
+  ),
+  custom: (
+    <Icon>
+      <path pathLength={1} d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4" />
+      <path pathLength={1} d="M14 3l5 5v3" />
+      <path pathLength={1} d="M14 3v5h5" />
+      <path pathLength={1} d="M8.5 12h4" />
+      <path pathLength={1} d="M8.5 16h2" />
+      <circle pathLength={1} cx="16.5" cy="17" r="4" />
+      <path pathLength={1} d="m14.8 17 1.2 1.2 2.2-2.4" />
+    </Icon>
+  ),
 };
 
 // Desde dónde entra cada card (se repite cada 3: izquierda, centro, derecha)
@@ -89,7 +90,7 @@ function RutaLateral({ id, lado, desfase = "0s" }) {
           <stop offset="1" stopColor="#ffe2b8" stopOpacity="0" />
         </linearGradient>
       </defs>
-      
+
       <g className="additional-services-contours">
         <ellipse cx="0" cy="170" rx="60" ry="80" />
         <ellipse cx="0" cy="170" rx="105" ry="140" />
@@ -134,7 +135,7 @@ export default function Adicionales({ servicios = adicionalesPorDefecto }) {
         subtitulo="Sumá extras a tu reserva y viajá más cómodo, seguro y sin límites por la Patagonia."
       >
         <ul className="additional-services-grid ">
-          {servicios.map((s, i) => (
+          {servicios.filter((s) => s.visible !== false).map((s, i) => (
             <Card
               as="li"
               key={s.id}
@@ -152,6 +153,10 @@ export default function Adicionales({ servicios = adicionalesPorDefecto }) {
               <span className="additional-services-tag">{s.etiqueta}</span>
               <h3 className="additional-services-title">{s.titulo}</h3>
               <p className="additional-services-text">{s.descripcion}</p>
+              <p className="additional-services-text">{s.descripcion}</p>
+              {textoPrecio(s) && (
+                <p className="additional-services-price">{textoPrecio(s)}</p>
+              )}
             </Card>
           ))}
         </ul>

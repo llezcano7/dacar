@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CarGallery from "../components/cargallery";
 import { armarBusqueda } from "../config/cotizacion.js";
+import { avisosAdicionales } from "../config/calculoAdicionales.js";
 import {
   LUGARES,
   HORAS,
@@ -98,6 +99,7 @@ export default function Hero({ minDias = 3 }) {
   };
 
   const busqueda = armarBusqueda(datos);
+  const avisos = avisosAdicionales(datos);
 
   return (
     <section className="hero">
@@ -241,6 +243,14 @@ export default function Hero({ minDias = 3 }) {
               Buscar autos
             </button>
           </div>
+
+          {avisos.length > 0 && (
+            <ul className="hero-avisos">
+              {avisos.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          )}
 
           {error && (
             <p className="hero-error" role="alert">

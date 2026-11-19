@@ -12,6 +12,10 @@
 //  - Un día con [] está cerrado.
 //  - Los lugares no se borran: se marcan activo: false. Las reservas viejas
 //    los referencian por id y no tienen que romperse.
+//  - El nombre del lugar es lo que ve el cliente en los selectores (LUGARES en
+//    busqueda.js sale de acá) y lo que viaja en la URL y en el mensaje de WhatsApp.
+//  - adicionalId (opcional): id de un adicional de config/adicionales.js que se
+//    cobra cada vez que el lugar es de retiro o de devolución.
 
 const semana = (franjas) => ({
    lun: franjas,
@@ -25,12 +29,13 @@ const semana = (franjas) => ({
 
 const horarioComercial = semana([{ desde: "09:00", hasta: "18:00" }]);
 
-const lugar = (id, nombre) => ({
+const lugar = (id, nombre, adicionalId = null) => ({
    id,
    nombre,
    activo: true,
    permiteRetiro: true,
    permiteDevolucion: true,
+   adicionalId,
    horarios: { retiro: horarioComercial, devolucion: horarioComercial },
 });
 
@@ -39,9 +44,11 @@ export const configPorDefecto = {
    minDiasAlquiler: 3,
    intervaloMinutos: 30,
    lugares: [
-      lugar("brc", "Aeropuerto (BRC)"),
+      lugar("brc", "Aeropuerto BRC"),
       lugar("centro", "Centro de Bariloche"),
-      lugar("sma", "San Martín de los Andes"),
-      lugar("otr", "Otros puntos del país"),
+      lugar("sma", "San Martin de los Andes", "dropoff-sma"),
+      lugar("calafate", "Calafate", "dropoff-calafate"),
+      lugar("ushuaia", "Ushuaia", "dropoff-ushuaia"),
+      lugar("otros", "Otros destinos", "dropoff-otros"),
    ],
 };

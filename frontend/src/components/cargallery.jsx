@@ -1,7 +1,8 @@
 import SeccionAnimada from "../components/seccionanimada";
 import Card from "../components/card";
 import { waLink } from "../config/contacto.js";
-import { mensajeWhatsapp, calcularTotal } from "../config/cotizacion.js";
+import { mensajeWhatsapp, calcularTotalConAdicionales } from "../config/cotizacion.js";
+import { etiquetaRenglon } from "../config/calculoAdicionales.js";
 import { flota, IVA, calcularPrecio } from "../config/cars";
 import { getPrecioDia } from "../config/tarifas.js";
 import { getPromocion } from "../config/promociones.js";
@@ -61,7 +62,10 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
             const promo = getPromocion(car, fecha);
             const descuento = promo?.descuento ?? 0;
             const calculo = calcularPrecio(precioDia ?? 0, descuento);
-            const total = busqueda ? calcularTotal(calculo.final, busqueda) : null;
+            const detalle = busqueda
+              ? calcularTotalConAdicionales(calculo.final, busqueda, { categoria: car.cat })
+              : null;
+            const total = detalle?.total ?? null;
 
             return (
               <Card
@@ -142,13 +146,27 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
                     </div>
                   </div>
 
+                  {detalle?.renglones.length > 0 && (
+                    <div className="car-card-breakdown">
+                      <div className="car-card-line">
+                        <span>Alquiler {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`}</span>
+                        <span>{formatPrice(detalle.tarifa)}</span>
+                      </div>
+                      {detalle.renglones.map((r, i) => (
+                        <div className="car-card-line" key={`${r.id}-${r.evento}-${i}`}>
+                          <span>{etiquetaRenglon(r)}</span>
+                          <span>{formatPrice(r.monto)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   {total != null && (
                     <div className="car-card-trip">
                       <span>Total {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.</span>                      <strong>{formatPrice(total)}</strong>
                     </div>
                   )}
                   <a
-                    href={waLink(mensajeWhatsapp(car, busqueda, "reservar"))}
+                    href={waLink(mensajeWhatsapp(car, busqueda, "reservar", detalle))}
                     className="car-card-btn"
                     target="_blank"
                     rel="noreferrer"
