@@ -172,7 +172,7 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                     <div className="flota-totales">
                       <div className="flota-trip">
                         <span>
-                          {hayDescuento ? "Final pagando ahora" : "Final"} · {busqueda.dias} días
+                          {hayDescuento ? "Final pagando AHORA" : "Final"} · {busqueda.dias} días
                           {busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.
                         </span>
                         <strong>{formatoPrecio(total)}</strong>
