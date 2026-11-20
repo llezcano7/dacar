@@ -1,5 +1,5 @@
 import { adicionales as catalogoPorDefecto } from "../config/adicionales";
-import { configPorDefecto } from "../config/configalquiler";
+import { configPorDefecto } from "../config/configAlquiler";
 
 // Lógica de adicionales. Son funciones puras (sin React ni estado), así que el día
 // que haya validación en el back se pueden portar tal cual: solo dependen de datos.
