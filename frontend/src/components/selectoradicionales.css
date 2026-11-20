@@ -1,0 +1,110 @@
+/* Selector de adicionales (buscador del inicio y de la flota).
+   Dos temas: claro (fondos off-white, el inicio) y oscuro (fondos #262626, la flota).
+   Todos los colores salen de las variables --sel-*; si querés usar tus variables
+   --color-*, cambiá los valores de cada tema. */
+.sel-adicionales-claro {
+  --sel-fondo: var(--color-bg);
+  --sel-borde: rgba(0, 0, 0, 0.18);
+  --sel-texto: var(--color-text);
+  --sel-suave: var(--color-text-light);
+  --sel-acento: var(--color-primary);
+  --sel-fondo-activo: #fff3ee;
+  --sel-paso-fondo: var(--color-white);
+  --sel-paso-borde: rgba(0, 0, 0, 0.18);}
+
+.sel-adicionales-oscuro {
+  --sel-fondo: var(--color-secondary-hover);
+  --sel-borde: rgba(255, 255, 255, 0.22);
+  --sel-texto: var(--color-white);
+  --sel-suave: var(--color-muted);
+  --sel-acento: var(--color-primary);
+  --sel-fondo-activo: rgba(252, 75, 8, 0.16);
+  --sel-paso-fondo: rgba(255, 255, 255, 0.1);
+  --sel-paso-borde: rgba(255, 255, 255, 0.28);
+}
+
+.sel-adicionales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.sel-adicionales-item {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--sel-borde);
+  border-radius: 8px;
+  background: var(--sel-fondo);
+}
+
+.sel-adicionales-item-activo {
+  border-color: var(--sel-acento);
+  background: var(--sel-fondo-activo);
+}
+
+.sel-adicionales-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.sel-adicionales-marca {
+  width: 18px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--sel-suave);
+}
+
+.sel-adicionales-item-activo .sel-adicionales-marca {
+  color: var(--sel-acento);
+}
+
+.sel-adicionales-texto {
+  display: flex;
+  flex-direction: column;
+}
+
+.sel-adicionales-nombre {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--sel-texto);
+}
+
+.sel-adicionales-precio {
+  font-size: clamp(0.7rem, 0.66rem + 0.17vw, 0.8rem);
+  color: var(--sel-suave);
+}
+
+.sel-adicionales-cantidad {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border-left: 1px solid var(--sel-acento);
+}
+
+.sel-adicionales-paso {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--sel-paso-borde);
+  border-radius: 6px;
+  background: var(--sel-paso-fondo);
+  color: var(--sel-texto);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sel-adicionales-numero {
+  min-width: 18px;
+  text-align: center;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--sel-texto);
+}

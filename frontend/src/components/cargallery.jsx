@@ -15,8 +15,6 @@ const formatPrice = (n) =>
     maximumFractionDigits: 0,
   }).format(n);
 
-
-
 // Arma la lista de características a partir de los datos del auto
 const caracteristicas = (car) => [
   { icon: "⚙️", label: `Caja ${car.transmision.toLowerCase()}` },
@@ -44,6 +42,7 @@ const Icon = ({ children }) => (
   </svg>
 );
 
+
 // cars es opcional: más adelante se puede pasar desde una API o dashboard
 export default function CarGallery({ cars = flota, busqueda = null }) {
   return (
@@ -66,6 +65,11 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
               ? calcularTotalConAdicionales(calculo.final, busqueda, { categoria: car.cat })
               : null;
             const total = detalle?.total ?? null;
+            const calculoMostrador = calcularPrecio(precioDia ?? 0, 0);
+            const detalleMostrador = busqueda
+              ? calcularTotalConAdicionales(calculoMostrador.final, busqueda, { categoria: car.cat })
+              : null;
+            const totalMostrador = detalleMostrador?.total ?? null;
 
             return (
               <Card
@@ -161,8 +165,21 @@ export default function CarGallery({ cars = flota, busqueda = null }) {
                     </div>
                   )}
                   {total != null && (
-                    <div className="car-card-trip">
-                      <span>Total {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.</span>                      <strong>{formatPrice(total)}</strong>
+                    <div className="car-card-totales">
+                      <div className="car-card-trip">
+                        <span>
+                          {descuento > 0 ? "Final pagando AHORA" : "Final"} · {busqueda.dias} días
+                          {busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} 
+                        </span>
+                        <strong>{formatPrice(total)}</strong>
+                      </div>
+
+                      {descuento > 0 && totalMostrador != null && (
+                        <div className="car-card-trip car-card-trip-mostrador">
+                          <span>Final pagando en mostrador</span>
+                          <strong>{formatPrice(totalMostrador)}</strong>
+                        </div>
+                      )}
                     </div>
                   )}
                   <a

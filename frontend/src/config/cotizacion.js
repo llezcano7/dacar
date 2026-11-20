@@ -1,5 +1,5 @@
 import { REGLAS_HORAS }  from "../config/tarifas";
-import { calcularAdicionales, etiquetaRenglon } from "./calculoAdicionales";
+import { calcularAdicionales, etiquetaRenglon, leerAdicionales, normalizarSeleccion } from "./calculoAdicionales";
 
 const dias = (n) => `${n} ${n === 1 ? "día" : "días"}`;
 
@@ -36,8 +36,8 @@ export const armarBusqueda = (b) => {
     else horasExtra = Math.ceil(resto / HORA);
   }
 
-  // Opcionales elegidos: llegan en la URL como "silla-bebe,cadenas"
-  const seleccionados = String(b.adicionales || "").split(",").filter(Boolean);
+  // Opcionales elegidos: llegan en la URL como "silla-bebe:2,cadenas" → { "silla-bebe": 2, cadenas: 1 }
+  const seleccionados = normalizarSeleccion(leerAdicionales(b.adicionales));
 
   return {
     seleccionados,

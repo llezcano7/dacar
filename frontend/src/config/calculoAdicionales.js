@@ -87,7 +87,7 @@ export const textoPrecio = (adicional) => {
 // evento es "retiro" | "devolucion" en los automáticos, y null en los opcionales.
 // eventos: en qué tramos aplica ("retiro" y/o "devolucion"). Si el adicional define
 // tituloPorEvento, el renglón usa el título de ese tramo ("ambos" si aplica en los dos).
-const armarRenglon = (adicional, evento, contexto, eventos = []) => {
+const armarRenglon = (adicional, evento, contexto, eventos = [], cantidad = 1) => {
   const clave = eventos.length > 1 ? "ambos" : eventos[0];
   const tituloPropio = adicional.tituloPorEvento?.[clave];
   return {
@@ -95,15 +95,60 @@ const armarRenglon = (adicional, evento, contexto, eventos = []) => {
     titulo: tituloPropio ?? adicional.titulo,
     evento,
     etiquetaCompleta: Boolean(tituloPropio), // el título ya dice el tramo: no agregar "(retiro)"
-    monto: calcularMonto(adicional, contexto),
+    cantidad,
+    monto: calcularMonto(adicional, contexto) * cantidad,
   };
 };
 
-// Texto de un renglón: "Drop-off San Martín de los Andes (devolución)" / "Silla para bebé"
+// Texto de un renglón: "Drop-off San Martín de los Andes (devolución)" / "Silla para bebé ×2"
 export const etiquetaRenglon = (r) => {
-  if (!r.evento || r.etiquetaCompleta) return r.titulo;
-  return `${r.titulo} (${r.evento === "retiro" ? "retiro" : "devolución"})`;
+  const base =
+    !r.evento || r.etiquetaCompleta
+      ? r.titulo
+      : `${r.titulo} (${r.evento === "retiro" ? "retiro" : "devolución"})`;
+  return r.cantidad > 1 ? `${base} ×${r.cantidad}` : base;
 };
+
+// Opcionales elegidos: en la URL viajan como "silla-bebe:2,cadenas" (sin ":n" es 1) y en el
+// código como un objeto id → cantidad: { "silla-bebe": 2, cadenas: 1 }.
+export const leerAdicionales = (texto) =>
+  Object.fromEntries(
+    String(texto || "")
+      .split(",")
+      .filter(Boolean)
+      .map((parte) => {
+        const [id, cantidad] = parte.split(":");
+        return [id, parseInt(cantidad, 10) || 1];
+      })
+  );
+
+export const escribirAdicionales = (seleccionados) =>
+  Object.entries(seleccionados)
+    .map(([id, cantidad]) => (cantidad > 1 ? `${id}:${cantidad}` : id))
+    .join(",");
+
+// La URL se puede editar a mano: deja solo opcionales que existen, con cantidad entre 1 y su max.
+export const normalizarSeleccion = (seleccionados, catalogo = catalogoPorDefecto) =>
+  Object.fromEntries(
+    Object.entries(seleccionados)
+      .map(([id, cantidad]) => {
+        const a = catalogo.find((x) => x.id === id && x.tipo === "opcional");
+        return a && [id, Math.min(Math.max(1, Math.floor(cantidad) || 1), a.max ?? 1)];
+      })
+      .filter(Boolean)
+  );
+
+// Devuelve la selección con la cantidad de un adicional cambiada (0 lo quita; respeta max).
+export const cambiarCantidad = (seleccionados, id, cantidad, catalogo = catalogoPorDefecto) => {
+  const a = catalogo.find((x) => x.id === id && x.tipo === "opcional");
+  if (!a) return seleccionados;
+  const nueva = Math.max(0, Math.min(cantidad, a.max ?? 1));
+  const { [id]: _anterior, ...resto } = seleccionados;
+  return nueva > 0 ? { ...resto, [id]: nueva } : resto;
+};
+
+// Acepta la selección como objeto id → cantidad o, por compatibilidad, como lista de ids.
+const comoMapa = (s) => (Array.isArray(s) ? Object.fromEntries(s.map((id) => [id, 1])) : s);
 
 // Qué adicionales automáticos corresponden a la reserva, sin montos.
 // Retiro y devolución se evalúan por separado, así que cada uno puede sumar los suyos.
@@ -165,12 +210,12 @@ export const avisosAdicionales = (
   });
 
 // Desglose completo: automáticos + opcionales elegidos.
-// b: resultado de armarBusqueda (trae b.seleccionados, los ids de opcionales tildados).
+// b: resultado de armarBusqueda (trae b.seleccionados: objeto id → cantidad de opcionales elegidos).
 // categoria: categoría del auto. tarifaBase: tarifa del alquiler sin adicionales.
 export const calcularAdicionales = (
   b,
   {
-    seleccionados = b?.seleccionados ?? [],
+    seleccionados = b?.seleccionados ?? {},
     categoria,
     tarifaBase = 0,
     config = configPorDefecto,
@@ -182,10 +227,10 @@ export const calcularAdicionales = (
   const automaticos = detectarAutomaticos(b, config, catalogo).map(({ adicional, evento, eventos }) =>
     armarRenglon(adicional, evento, contexto, eventos)
   );
-  const opcionales = seleccionados
-    .map((id) => catalogo.find((a) => a.id === id && a.tipo === "opcional"))
-    .filter(Boolean)
-    .map((a) => armarRenglon(a, null, contexto));
+  const elegidos = normalizarSeleccion(comoMapa(seleccionados), catalogo);
+  const opcionales = catalogo
+    .filter((a) => elegidos[a.id])
+    .map((a) => armarRenglon(a, null, contexto, [], elegidos[a.id]));
 
   const renglones = [...automaticos, ...opcionales];
   const total = renglones.reduce((suma, r) => suma + r.monto, 0);

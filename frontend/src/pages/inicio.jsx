@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CarGallery from "../components/cargallery";
 import { armarBusqueda } from "../config/cotizacion.js";
-import { avisosAdicionales } from "../config/calculoAdicionales.js";
+import { avisosAdicionales, escribirAdicionales } from "../config/calculoAdicionales.js";
+import SelectorAdicionales from "../components/selectoradicionales.jsx";
 import {
   LUGARES,
   HORAS,
@@ -46,6 +47,7 @@ export default function Hero({ minDias = 3 }) {
   const navigate = useNavigate();
   const [mismoLugar, setMismoLugar] = useState(true);
   const [error, setError] = useState("");
+  const [verAdicionales, setVerAdicionales] = useState(false);
   const [f, setF] = useState({
     lugarRetiro: LUGARES[0],
     fechaRetiro: "",
@@ -53,11 +55,14 @@ export default function Hero({ minDias = 3 }) {
     lugarDevolucion: LUGARES[0],
     fechaDevolucion: "",
     horaDevolucion: "10:00",
+    adicionales: {}, // opcionales elegidos: id → cantidad
   });
 
   // Datos de la búsqueda con el lugar de devolución ya resuelto
+  const { adicionales, ...resto } = f;
+  const textoAdicionales = escribirAdicionales(adicionales); // "silla-bebe:2,cadenas"
   const datos = {
-    ...f,
+    ...resto,
     lugarDevolucion: mismoLugar ? f.lugarRetiro : f.lugarDevolucion,
   };
 
@@ -95,10 +100,15 @@ export default function Hero({ minDias = 3 }) {
     }
 
     setError("");
-    navigate(`${FLOTA_URL}?${new URLSearchParams(datos)}`);
+    navigate(
+      `${FLOTA_URL}?${new URLSearchParams({
+        ...datos,
+        ...(textoAdicionales && { adicionales: textoAdicionales }),
+      })}`
+    );
   };
 
-  const busqueda = armarBusqueda(datos);
+  const busqueda = armarBusqueda({ ...datos, adicionales: textoAdicionales });
   const avisos = avisosAdicionales(datos);
 
   return (
@@ -242,6 +252,29 @@ export default function Hero({ minDias = 3 }) {
               </Icon>
               Buscar autos
             </button>
+          </div>
+
+          <div className="hero-adicionales">
+            <button
+              type="button"
+              className="hero-adicionales-toggle"
+              aria-expanded={verAdicionales}
+              onClick={() => setVerAdicionales((v) => !v)}
+            >
+              Adicionales <small>(opcional)</small>
+              {Object.keys(adicionales).length > 0 && (
+                <span className="hero-adicionales-count">{Object.keys(adicionales).length}</span>
+              )}
+              <span className="hero-adicionales-flecha" aria-hidden="true">
+                {verAdicionales ? "▲" : "▼"}
+              </span>
+            </button>
+            {verAdicionales && (
+              <SelectorAdicionales
+                valor={adicionales}
+                onChange={(nuevos) => setF((prev) => ({ ...prev, adicionales: nuevos }))}
+              />
+            )}
           </div>
 
           {avisos.length > 0 && (

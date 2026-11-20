@@ -37,6 +37,7 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
   const [params, setParams] = useSearchParams();
   const busqueda = armarBusqueda(Object.fromEntries(params));
 
+
   const visibles = autos.filter((a) => cat === "todos" || a.cat === cat);
 
   return (
@@ -69,6 +70,12 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
               ? calcularTotalConAdicionales(precio.final, busqueda, { categoria: a.cat })
               : null;
             const total = detalle?.total ?? null;
+
+            const precioMostrador = precioDia != null ? calcularPrecio(precioDia, 0) : null;
+            const detalleMostrador = busqueda && precioMostrador
+              ? calcularTotalConAdicionales(precioMostrador.final, busqueda, { categoria: a.cat })
+              : null;
+            const totalMostrador = detalleMostrador?.total ?? null;
 
             return (
               <article key={a.id} className="flota-card">
@@ -162,9 +169,21 @@ export default function Flota({ autos = flotaPorDefecto, minDias = 3 }) {
                     </div>
                   )}
                   {total != null && (
-                    <div className="flota-trip">
-                      <span>Total {busqueda.dias} días{busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.</span>
-                      <strong>{formatoPrecio(total)}</strong>
+                    <div className="flota-totales">
+                      <div className="flota-trip">
+                        <span>
+                          {hayDescuento ? "Final pagando ahora" : "Final"} · {busqueda.dias} días
+                          {busqueda.horasExtra > 0 && ` + ${busqueda.horasExtra} hs`} · IVA incl.
+                        </span>
+                        <strong>{formatoPrecio(total)}</strong>
+                      </div>
+
+                      {hayDescuento && totalMostrador != null && (
+                        <div className="flota-trip flota-trip-mostrador">
+                          <span>Final pagando en mostrador</span>
+                          <strong>{formatoPrecio(totalMostrador)}</strong>
+                        </div>
+                      )}
                     </div>
                   )}
                   <a

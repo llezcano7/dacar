@@ -96,6 +96,7 @@ export const adicionales = [
     etiqueta: "Seguridad",
     tipo: "opcional",
     cobro: "por-dia",
+    max: 2,
     valor: 5000,
   },
   {
@@ -107,6 +108,7 @@ export const adicionales = [
     etiqueta: "Invierno",
     tipo: "opcional",
     cobro: "por-periodo",
+    visible: false,
     valor: 0,
   },
   {
@@ -117,7 +119,7 @@ export const adicionales = [
       "Sumá una cobertura extra para reducir tu responsabilidad ante imprevistos y manejar sin preocupaciones.",
     etiqueta: "Seguro",
     tipo: "opcional",
-    cobro: "por-periodo", 
+    cobro: "por-periodo",
     valor: { economicos: 120000, medianos: 150000, grandes: 300000 },
   },
   {
@@ -129,6 +131,7 @@ export const adicionales = [
     etiqueta: "Conductor",
     tipo: "opcional",
     cobro: "por-periodo",
+    max: 3,
     valor: 15000,
   },
   {

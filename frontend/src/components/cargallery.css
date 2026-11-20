@@ -234,6 +234,23 @@
     outline-offset: 2px;
 }
 
+/* cargallery.css: igual, con el prefijo car-card- */
+.car-card-totales { display: grid; gap: 6px; }
+
+.car-card-totales .car-card-trip strong {
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+}
+
+.car-card-trip-mostrador {
+  opacity: .7;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  color: var(--color-text-light);
+}
+.car-card-trip-mostrador strong {
+  font-size: clamp(0.875rem, 0.82rem + 0.23vw, 1rem);
+  font-weight: 500;
+}
+
 @keyframes car-gallery-pulso {
 
     0%,

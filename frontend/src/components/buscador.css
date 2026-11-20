@@ -53,7 +53,7 @@
 }
 
 .bflota-data span {
-  font-size: 12px;
+  font-size: clamp(0.7rem, 0.66rem + 0.17vw, 0.8rem);
   font-weight: 600;
   color: var(--color-border);
 }
@@ -136,7 +136,7 @@
   gap: var(--space-s);
 }
 
-.bflota-field{
+.bflota-field {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs)
@@ -163,7 +163,6 @@
   font: inherit;
   font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
   color-scheme: dark;
-  /* íconos del calendario visibles sobre fondo oscuro */
 }
 
 .bflota-group select:focus-visible,
@@ -197,7 +196,6 @@
   gap: var(--space-s);
   min-height: 48px;
   padding: 0 24px;
-  border-radius: 999px;
   font: inherit;
   font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
   font-weight: 700;
@@ -207,12 +205,12 @@
 
 /* primary-active: texto blanco con contraste AA (ver nota en flota.css) */
 .bflota-btn {
-  background: var(--color-primary-active);
+  background: var(--color-primary);
   color: var(--color-text-on-primary);
 }
 
 .bflota-btn-contorno {
-  border: 1.5px solid var(--color-secondary-light);
+  border: none;
   background: transparent;
   color: var(--color-white);
 }
@@ -223,27 +221,25 @@
 }
 
 /* ===== Agregar al FINAL de buscador.css ===== */
+
 .bflota-extras {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
   margin-top: var(--space-4, 16px);
 }
 
-.bflota-extras-list {
+.bflota-adicionales {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  margin-top: 8px;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: 14px;
 }
 
-.bflota-extra {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  color: var(--secondary-color);
-}
-
-.bflota-extra input {
-  accent-color:var(--color-primary);
+.bflota-adicionales-titulo {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  font-weight: 800;
+  color: var(--color-text-on-primary);
 }
 
 .bflota-avisos {
@@ -251,26 +247,12 @@
   margin: 12px 0 0;
   padding: 10px 14px;
   border-radius: 8px;
-  background: var(--color-bg);
+  background: rgba(252, 75, 8, 0.16);
 }
 
 .bflota-avisos li {
-  color: #b33600;
-  font-size: 0.9rem;
-}
-
-/* ===== Agregar al FINAL de inicio.css (el css del Hero) ===== */
-.hero-avisos {
-  list-style: none;
-  margin: 12px 0 0;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: #fff3ee;
-}
-
-.hero-avisos li {
-  color: #b33600;
-  font-size: 0.9rem;
+  color: var(--color-primary-hover);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
 }
 
 @media(max-width: 726px) {

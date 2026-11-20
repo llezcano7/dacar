@@ -1,6 +1,13 @@
 import { useState } from "react";
 import "./buscador.css";
 import { LUGARES, HORAS, hoy, sumarDias, dias, validarBusqueda } from "../config/busqueda.js";
+import {
+    avisosAdicionales,
+    leerAdicionales,
+    escribirAdicionales,
+    normalizarSeleccion,
+} from "../config/calculoAdicionales.js";
+import SelectorAdicionales from "./selectoradicionales.jsx";
 
 const Campo = ({ label, children }) => (
     <label className="bflota-field">
@@ -17,6 +24,7 @@ const valoresIniciales = (v = {}) => ({
     lugarDevolucion: v.lugarDevolucion || v.lugarRetiro || LUGARES[0],
     fechaDevolucion: v.fechaDevolucion || "",
     horaDevolucion: v.horaDevolucion || "10:00",
+    adicionales: normalizarSeleccion(leerAdicionales(v.adicionales)),
 });
 
 // busqueda:     datos ya formateados para mostrar (o null si no hay búsqueda)
@@ -66,6 +74,16 @@ export default function BuscadorFlota({ busqueda, valores, minDias = 3, onActual
         }
     };
 
+    // En el formulario de edición los adicionales se aplican con "Actualizar búsqueda"
+    const onAdicionales = (adicionales) => setF((prev) => ({ ...prev, adicionales }));
+
+    // En la barra de búsqueda se aplican al instante: actualizan la URL y las cards recalculan
+    const aplicarAdicionales = (adicionales) => {
+        const { adicionales: _anteriores, ...resto } = valores;
+        const texto = escribirAdicionales(adicionales);
+        onActualizar({ ...resto, ...(texto && { adicionales: texto }) });
+    };
+
     const onSubmit = (e) => {
         e.preventDefault();
         const mensaje = validarBusqueda(f, minDias);
@@ -74,12 +92,20 @@ export default function BuscadorFlota({ busqueda, valores, minDias = 3, onActual
             return;
         }
         setError("");
+        const { adicionales, ...resto } = f;
+        const texto = escribirAdicionales(adicionales);
         onActualizar({
-            ...f,
+            ...resto,
             lugarDevolucion: mismoLugar ? f.lugarRetiro : f.lugarDevolucion,
+            ...(texto && { adicionales: texto }),
         });
         setEditando(false);
     };
+
+    const avisos = avisosAdicionales({
+        ...f,
+        lugarDevolucion: mismoLugar ? f.lugarRetiro : f.lugarDevolucion,
+    });
 
     return (
         <section className="bflota">
@@ -89,6 +115,7 @@ export default function BuscadorFlota({ busqueda, valores, minDias = 3, onActual
                         <div className="bflota-info">
                             <span className="bflota-eyebrow">Tu búsqueda</span>
                             {busqueda ? (
+                                <>
                                 <div className="bflota-datas">
                                     <div className="bflota-data">
                                         <span>Retiro</span>
@@ -103,6 +130,15 @@ export default function BuscadorFlota({ busqueda, valores, minDias = 3, onActual
                                         <strong>{dias(busqueda.dias)}</strong>
                                     </div>
                                 </div>
+                                <div className="bflota-adicionales">
+                                    <span className="bflota-adicionales-titulo">Adicionales</span>
+                                    <SelectorAdicionales
+                                        tema="oscuro"
+                                        valor={busqueda.seleccionados}
+                                        onChange={aplicarAdicionales}
+                                    />
+                                </div>
+                                </>
                             ) : (
                                 <p className="bflota-empty">
                                     Todavía no elegiste fechas. Elegilas para ver el total de tu viaje.
@@ -213,6 +249,21 @@ export default function BuscadorFlota({ busqueda, valores, minDias = 3, onActual
                                 </div>
                             </div>
                         </div>
+
+                        <div className="bflota-extras" role="group" aria-label="Adicionales">
+                            <div className="bflota-group-title">
+                                Adicionales <small>opcionales</small>
+                            </div>
+                            <SelectorAdicionales tema="oscuro" valor={f.adicionales} onChange={onAdicionales} />
+                        </div>
+
+                        {avisos.length > 0 && (
+                            <ul className="bflota-avisos">
+                                {avisos.map((t) => (
+                                    <li key={t}>{t}</li>
+                                ))}
+                            </ul>
+                        )}
 
                         {error && (
                             <p className="bflota-error" role="alert">

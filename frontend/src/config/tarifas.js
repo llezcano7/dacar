@@ -9,7 +9,7 @@ export const tarifas = {
     { desde: "2000-01-01", precioDia: 90350 },
     { desde: "2026-12-10", precioDia: 117500 },
   ],
-  "4x4": [
+  grandes: [
     { desde: "2000-01-01", precioDia: 130000 },
     { desde: "2026-12-10", precioDia: 160000 },
   ],
